@@ -1,0 +1,24 @@
+sudo: required
+language: generic
+services:
+  - docker
+
+before_install:
+  - docker build -t nuclearaaron/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true nuclearaaron/react-test npm run test
+
+after_success:
+  - docker build -t nuclearaaron/multi-client ./client
+  - docker build -t nuclearaaron/multi-nginx ./nginx
+  - docker build -t nuclearaaron/multi-server ./server
+  - docker build -t nuclearaaron/multi-worker ./worker
+# Log in to docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+# push images to docker hub
+  - docker push nuclearaaron/multi-client
+  - docker push nuclearaaron/multi-nginx
+  - docker push nuclearaaron/multi-server
+  - docker push nuclearaaron/multi-worker
+  
