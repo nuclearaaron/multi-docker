@@ -15,7 +15,7 @@ after_success:
   - docker build -t nuclearaaron/multi-server ./server
   - docker build -t nuclearaaron/multi-worker ./worker
 # Log in to docker CLI
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_ID" --password-stdin
 # push images to docker hub
   - docker push nuclearaaron/multi-client
   - docker push nuclearaaron/multi-nginx
